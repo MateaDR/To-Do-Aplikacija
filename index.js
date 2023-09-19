@@ -84,7 +84,7 @@
     let vrijemeTrajanja = new Date();
     vrijemeTrajanja.setTime(vrijemeTrajanja.getTime() + 5 * 60 * 1000); // 5 minuta
     console.log(imeKolaca + "=" + vrijednost + "; expires=" + vrijemeTrajanja.toUTCString() + "; path=/; SameSite=None; Secure");
-    document.cookie = imeKolaca + "=" + vrijednost + "; path=/; SameSite=None; Secure";
+    document.cookie = imeKolaca + "=" + vrijednost + "; expires=" + vrijemeTrajanja.toUTCString() + "; path=/; SameSite=None; Secure";
     console.log(document.cookie);
   }
 
