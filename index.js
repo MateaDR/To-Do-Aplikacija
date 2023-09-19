@@ -25,6 +25,10 @@ function spremiKolacice(imeKolaca, vrijednost) {
   document.cookie = imeKolaca + "=" + vrijednost + "; path=/";
 }
 
+function JednaRijec(rijec) {
+  return rijec.replace(/\s+/g, ' ').trim();
+}
+
 /**
  * Služi za prikaz zadataka (to-do) koji su spremljeni kao trajni kolačići
  */
@@ -37,10 +41,10 @@ function prikaziZadatke() {
     zadaci.forEach((zadatak, index) => {
       let noviZadatak = document.createElement("li");
       noviZadatak.setAttribute("data-value", zadatak.naziv);
-      noviZadatak.innerHTML = `<input id="${zadatak.naziv}" type="checkbox"> ${zadatak.naziv} <button id="brisiZadatak">Brisi</button>`;
-      noviZadatak.querySelector(`#${zadatak.naziv}`).checked = zadatak.izvrsen;
+      noviZadatak.innerHTML = `<input id="${JednaRijec(zadatak.naziv)}" type="checkbox"> ${zadatak.naziv} <button id="brisiZadatak">Brisi</button>`;
+      noviZadatak.querySelector(`#${JednaRijec(zadatak.naziv)}`).checked = zadatak.izvrsen;
       listaZadataka.appendChild(noviZadatak);
-      noviZadatak.querySelector(`#${zadatak.naziv}`).addEventListener("change", (e) => {
+      noviZadatak.querySelector(`#${JednaRijec(zadatak.naziv)}`).addEventListener("change", (e) => {
         let zadaci = dohvatiKolacice("zadaci");
         zadaci = zadaci ? JSON.parse(zadaci) : [];
         zadaci.forEach(Zadatak => {
