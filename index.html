@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>To-Do Aplikacija</title>
+</head>
+
+<body>
+    <div id="Prijava" class="overlay">
+        <div class="overlay-forma">
+            <h2>Prijavi se</h2>
+            <form id="Forma">
+                <input type="text" id="KorisnickoIme" placeholder="Unesi ime">
+                <input type="password" id="Sifra" placeholder="Unesi sifru">
+                <button id="Prijava">Prijavi se</button>
+                <button id="Registracija">Registriraj se</button>
+            </form>
+        </div>
+    </div>
+    <div id="Aplikacija">
+        <h1>To-Do Aplikacija</h1>
+        <div id="unos">
+            <input type="text" id="unesiZadatak" placeholder="Unesi zadatak">
+            <button id="dodaj">Dodaj Zadatak</button>
+        </div>
+        <div id="zadaci">
+            <p>Zadaci:</p>
+            <ul id="listaZadataka"></ul>
+        </div>
+        <script src="index.js"></script>
+    </div>
+</body>
+
+</html>
