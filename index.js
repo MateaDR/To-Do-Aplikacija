@@ -164,6 +164,7 @@ document.querySelector("#Prijava").addEventListener("click", (e) => {
     let korisnickoImeKolaci = atob(dohvatiKolacice("imesifra"));
     if (korisnickoImeKolaci != "") {
       if (korisnickoImeKolaci == korisnickoIme + sifra) {
+        spremiTrenutneKolace("imesifra", btoa(korisnickoIme + sifra));
         prikaziZadatke();
         document.querySelector("#Aplikacija").style.display = "flex";
         document.querySelector("#Prijava").style.display = "none";
