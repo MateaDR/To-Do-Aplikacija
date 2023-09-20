@@ -67,3 +67,15 @@ div#zadaci {
     flex-direction: column;
     justify-content: center;
 }
+
+div#zaglavlje {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+div#zaglavlje>button {
+    justify-self: center;
+}
