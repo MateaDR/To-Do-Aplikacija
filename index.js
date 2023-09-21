@@ -26,16 +26,6 @@ function spremiKolacice(imeKolaca, vrijednost) {
 }
 
 /**
- * Ovo je za zadatke koji imaju više riječi pa ih vraća kao jednu riječ
- * Ovo koristimo da bismo identificirali checkboxove
- * @param {string} rijec 
- * @returns string
- */
-function JednaRijec(rijec) {
-  return rijec.replace(/\s+/g, "");
-}
-
-/**
  * Služi za prikaz zadataka (to-do) koji su spremljeni kao trajni kolačići
  */
 function prikaziZadatke() {
@@ -46,17 +36,15 @@ function prikaziZadatke() {
   if (zadaci.length > 0) {
     zadaci.forEach((zadatak, index) => {
       let noviZadatak = document.createElement("li");
-      noviZadatak.setAttribute("data-value", zadatak.naziv);
-      noviZadatak.innerHTML = `<input id="${JednaRijec(
-        zadatak.naziv
-      )}" type="checkbox"> ${
+      noviZadatak.setAttribute("data-value", zadatak.id);
+      noviZadatak.innerHTML = `<input id="${zadatak.id}" type="checkbox"> ${
         zadatak.naziv
       } <button id="brisiZadatak">Brisi</button>`;
-      noviZadatak.querySelector(`#${JednaRijec(zadatak.naziv)}`).checked =
+      noviZadatak.querySelector(`#${zadatak.id}`).checked =
         zadatak.izvrsen;
       listaZadataka.appendChild(noviZadatak);
       noviZadatak
-        .querySelector(`#${JednaRijec(zadatak.naziv)}`)
+        .querySelector(`#${zadatak.id}`)
         .addEventListener("change", (e) => {
           let zadaci = dohvatiKolacice("zadaci");
           zadaci = zadaci ? JSON.parse(zadaci) : [];
@@ -74,7 +62,7 @@ function prikaziZadatke() {
         let Zadaci = postojeciZadaci ? JSON.parse(postojeciZadaci) : [];
         Zadaci = Zadaci.filter(
           (zadatak) =>
-            zadatak.naziv !== brisi.parentNode.getAttribute("data-value")
+            zadatak.id !== brisi.parentNode.getAttribute("data-value")
         );
         spremiKolacice("zadaci", JSON.stringify(Zadaci));
         prikaziZadatke();
@@ -153,6 +141,40 @@ document.querySelector("#prihvati-kolacice").addEventListener("click", (e) => {
   document.querySelector("#kolacici").style.display = "none";
 });
 
+
+/**
+ * Funkcija koja generira ID za zadatak
+ * Zadatak1, Zadatak2...
+ * @param {string} id 
+ * @param {Array} niz 
+ * @returns 
+ */
+function generirajID(id, niz) {
+  let brojac = 1;
+  let jedinstveniID = `${id}${brojac}`;
+  console.log(niz);
+  while (zauzetID(jedinstveniID,niz)) {
+    jedinstveniID = `${id}${brojac}`;
+    brojac++;
+  }
+  return jedinstveniID;
+}
+
+/**
+ * Funkcija koja provjerava da li je taj niz zauzet
+ * @param {string} id 
+ * @param {Array} niz 
+ * @returns 
+ */
+function zauzetID(id, niz) {
+  for (let i = 0; i < niz.length; i++) {
+    if (niz[i].id === id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Događaj kada se klikne dugme "Dodaj Zadatak"
  * Provjerava da li takav isti zadatak vec u listi
@@ -175,9 +197,10 @@ document.querySelector("#dodaj").addEventListener("click", () => {
     if (postojeciZadatak === false) {
       let noviZadatak = {
         naziv: inputZadatak,
-        id: JednaRijec(inputZadatak),
+        id: generirajID("Zadatak",zadaci),
         izvrsen: false,
       };
+      ;
       zadaci.push(noviZadatak);
       spremiKolacice("zadaci", JSON.stringify(zadaci));
       document.querySelector("#unesiZadatak").value = "";
