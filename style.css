@@ -79,3 +79,42 @@ div#zaglavlje {
 div#zaglavlje>button {
     justify-self: center;
 }
+
+.kolacici-banner {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10000;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.kolacici-banner > ul {
+    align-self: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.kolacici-banner > ul > li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.kolacici-banner > ul > li > input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#prihvati-kolacice {
+    background-color: crimson;
+    color: whitesmoke;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+}
