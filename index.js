@@ -66,7 +66,6 @@ function prikaziZadatke() {
             }
           });
           spremiKolacice("zadaci", JSON.stringify(zadaci));
-          //e.target.checked
         });
     });
     document.querySelectorAll("#brisiZadatak").forEach((brisi) => {
@@ -96,14 +95,6 @@ function prikaziZadatke() {
 function spremiTrenutneKolace(imeKolaca, vrijednost) {
   let vrijemeTrajanja = new Date();
   vrijemeTrajanja.setTime(vrijemeTrajanja.getTime() + 60 * 60 * 1000); // 60 minuta
-  console.log(
-    imeKolaca +
-      "=" +
-      vrijednost +
-      "; expires=" +
-      vrijemeTrajanja.toUTCString() +
-      "; path=/; SameSite=None; Secure"
-  );
   document.cookie =
     imeKolaca +
     "=" +
@@ -111,8 +102,56 @@ function spremiTrenutneKolace(imeKolaca, vrijednost) {
     "; expires=" +
     vrijemeTrajanja.toUTCString() +
     "; path=/; SameSite=None; Secure";
-  console.log(document.cookie);
 }
+
+/**
+ * Događaj kada se stranica ucita
+ * Gledamo da li postoje kolacici
+ * Ako postoju, provjerit cemo da li je korisnik prihvatio kolacice, ako nije onda cemo pokazati prozor da ih prihvati
+ * Ako ne postoju, postavit cemo nove u kojima su samo obavezni ukljuceni
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  if (dohvatiKolacice("kolacici") != "") {
+    let kolacici = dohvatiKolacice("kolacici");
+    kolacici = JSON.parse(kolacici);
+    if (kolacici.dugmestisnuto === false) {
+      console.log("Dugme nije stisnuto, prikazuje se prozor za kolacice");
+      document.querySelector("#kolacici").style.display = "flex";
+    }
+  }
+  else {
+    let expires = new Date();
+    expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // Traju 1 godinu
+    let objektKolacica = {
+      dugmestisnuto: false,
+      obavezni: true,
+      statisticki: false,
+      marketinski: false
+    } // Pocetni kolacici
+    document.cookie = `kolacici=${JSON.stringify(objektKolacica)};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+    document.querySelector("#kolacici").style.display = "flex";
+  }
+});
+
+/**
+ * Događaj kada se pritisne dugme prihvati kolacice
+ * Azurira prihvacene kolacice
+ */
+document.querySelector("#prihvati-kolacice").addEventListener("click", (e) => {
+  e.preventDefault();
+  let statisticki = document.querySelector("input#statisticki-kolacici");
+  let marketinski = document.querySelector("input#marketinski-kolacici");
+  let objektKolacica = {
+    dugmestisnuto: true,
+    obavezni: true,
+    statisticki: statisticki.checked,
+    marketinski: marketinski.checked
+  }
+  let expires = new Date();
+  expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // Traju 1 godinu
+  document.cookie = `kolacici=${JSON.stringify(objektKolacica)};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+  document.querySelector("#kolacici").style.display = "none";
+});
 
 /**
  * Događaj kada se klikne dugme "Dodaj Zadatak"
@@ -184,11 +223,13 @@ document.querySelector("#Registracija").addEventListener("click", (e) => {
   e.preventDefault();
   let korisnickoIme = document.querySelector("#KorisnickoIme").value;
   let sifra = document.querySelector("#Sifra").value;
-  spremiKolacice("zadaci", JSON.stringify([])); // Ocisti postojece zadatke
-  spremiTrenutneKolace("imesifra", btoa(korisnickoIme + sifra));
-  alert("Registracija završena.");
-  document.querySelector("#Aplikacija").style.display = "flex";
-  document.querySelector("#Prijava").style.display = "none";
+  if (korisnickoIme != "" && sifra != "") {
+    spremiKolacice("zadaci", JSON.stringify([])); // Ocisti postojece zadatke
+    spremiTrenutneKolace("imesifra", btoa(korisnickoIme + sifra));
+    alert("Registracija završena.");
+    document.querySelector("#Aplikacija").style.display = "flex";
+    document.querySelector("#Prijava").style.display = "none";
+  }
 });
 
 /**
