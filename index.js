@@ -22,7 +22,8 @@ function dohvatiKolacice(imeKolaca) {
  * @param {*} vrijednost
  */
 function spremiKolacice(imeKolaca, vrijednost) {
-  document.cookie = imeKolaca + "=" + vrijednost + "; path=/; SameSite=None; Secure";
+  document.cookie =
+    imeKolaca + "=" + vrijednost + "; path=/; SameSite=None; Secure";
 }
 
 /**
@@ -37,11 +38,8 @@ function prikaziZadatke() {
     zadaci.forEach((zadatak, index) => {
       let noviZadatak = document.createElement("li");
       noviZadatak.setAttribute("data-value", zadatak.id);
-      noviZadatak.innerHTML = `<input id="${zadatak.id}" type="checkbox"> ${
-        zadatak.naziv
-      } <button id="brisiZadatak">Brisi</button>`;
-      noviZadatak.querySelector(`#${zadatak.id}`).checked =
-        zadatak.izvrsen;
+      noviZadatak.innerHTML = `<input id="${zadatak.id}" type="checkbox"> ${zadatak.naziv} <button id="brisiZadatak">Brisi</button>`;
+      noviZadatak.querySelector(`#${zadatak.id}`).checked = zadatak.izvrsen;
       listaZadataka.appendChild(noviZadatak);
       noviZadatak
         .querySelector(`#${zadatak.id}`)
@@ -94,11 +92,12 @@ function spremiTrenutneKolace(imeKolaca, vrijednost) {
 
 /**
  * Događaj kada se stranica ucita
- * Gledamo da li postoje kolacici
+ * Gledamo da li postoje kolacic koji sadrži koje je sve kolačiće korisnik prihvatio
  * Ako postoju, provjerit cemo da li je korisnik prihvatio kolacice, ako nije onda cemo pokazati prozor da ih prihvati
  * Ako ne postoju, postavit cemo nove u kojima su samo obavezni ukljuceni
  */
 document.addEventListener("DOMContentLoaded", () => {
+  // Provjera da li su prihvaćeni kolačići
   if (dohvatiKolacice("kolacici") != "") {
     let kolacici = dohvatiKolacice("kolacici");
     kolacici = JSON.parse(kolacici);
@@ -106,18 +105,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Dugme nije stisnuto, prikazuje se prozor za kolacice");
       document.querySelector("#kolacici").style.display = "flex";
     }
-  }
-  else {
+  } else {
     let expires = new Date();
-    expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // Traju 1 godinu
+    expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000); // Traju 1 godinu
     let objektKolacica = {
       dugmestisnuto: false,
       obavezni: true,
       statisticki: false,
-      marketinski: false
-    } // Pocetni kolacici
-    document.cookie = `kolacici=${JSON.stringify(objektKolacica)};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+      marketinski: false,
+    }; // Pocetni kolacici
+    console.log(
+      "Funkcionalni kolačići su automatski prihvaćeni za rad aplikacije."
+    );
+    document.cookie = `kolacici=${JSON.stringify(
+      objektKolacica
+    )};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
     document.querySelector("#kolacici").style.display = "flex";
+  }
+
+  // Provjera da li su kolačići za prijavu istekli, ako jesu onda se očistu
+  if (document.cookie.indexOf("imesifra") < 0) {
+    // Ako je kolačić istekao, brišu se svi kolačići osim onih koji sadržavaju koje je kolačiće korisnik prihvatio
+    console.log("Kolačići za prijavu su istekli.");
+    spremiKolacice("zadaci", JSON.stringify([])); // Ocisti postojece zadatke
+    spremiTrenutneKolace("imesifra", "");
   }
 });
 
@@ -133,27 +144,34 @@ document.querySelector("#prihvati-kolacice").addEventListener("click", (e) => {
     dugmestisnuto: true,
     obavezni: true,
     statisticki: statisticki.checked,
-    marketinski: marketinski.checked
-  }
+    marketinski: marketinski.checked,
+  };
   let expires = new Date();
-  expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // Traju 1 godinu
-  document.cookie = `kolacici=${JSON.stringify(objektKolacica)};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+  expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000); // Traju 1 godinu
+  document.cookie = `kolacic  i=${JSON.stringify(
+    objektKolacica
+  )};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
   document.querySelector("#kolacici").style.display = "none";
+  if (statisticki.checked) {
+    console.log("Korisnik je prihvatio kolačiće za statistiku");
+  }
+  if (marketinski.checked) {
+    console.log("Korisnik je prihvatio kolačiće za marketing");
+  }
 });
-
 
 /**
  * Funkcija koja generira ID za zadatak
  * Zadatak1, Zadatak2...
- * @param {string} id 
- * @param {Array} niz 
- * @returns 
+ * @param {string} id
+ * @param {Array} niz
+ * @returns
  */
 function generirajID(id, niz) {
   let brojac = 1;
   let jedinstveniID = `${id}${brojac}`;
   console.log(niz);
-  while (zauzetID(jedinstveniID,niz)) {
+  while (zauzetID(jedinstveniID, niz)) {
     jedinstveniID = `${id}${brojac}`;
     brojac++;
   }
@@ -162,9 +180,9 @@ function generirajID(id, niz) {
 
 /**
  * Funkcija koja provjerava da li je taj niz zauzet
- * @param {string} id 
- * @param {Array} niz 
- * @returns 
+ * @param {string} id
+ * @param {Array} niz
+ * @returns
  */
 function zauzetID(id, niz) {
   for (let i = 0; i < niz.length; i++) {
@@ -197,10 +215,9 @@ document.querySelector("#dodaj").addEventListener("click", () => {
     if (postojeciZadatak === false) {
       let noviZadatak = {
         naziv: inputZadatak,
-        id: generirajID("Zadatak",zadaci),
+        id: generirajID("Zadatak", zadaci),
         izvrsen: false,
       };
-      ;
       zadaci.push(noviZadatak);
       spremiKolacice("zadaci", JSON.stringify(zadaci));
       document.querySelector("#unesiZadatak").value = "";
@@ -262,8 +279,8 @@ document.querySelector("#Registracija").addEventListener("click", (e) => {
  */
 document.querySelector("#Odjava").addEventListener("click", (e) => {
   e.preventDefault();
-  spremiKolacice("zadaci", JSON.stringify([])); // Ocisti postojece zadatke
-  spremiTrenutneKolace("imesifra", "");
+  /*spremiKolacice("zadaci", JSON.stringify([])); // Ocisti postojece zadatke
+  spremiTrenutneKolace("imesifra", "");*/
   document.querySelector("#Aplikacija").style.display = "none";
   document.querySelector("#Prijava").style.display = "flex";
 });
