@@ -235,7 +235,7 @@ document.querySelector("#dodaj").addEventListener("click", () => {
  * Ako je šifra ispravna, prikazuju se zadaci i div od aplikacije, a prijava se sakriva
  * Ako nije, ispisuje se poruka "Kriva šifra"
  */
-document.querySelector("#Prijava").addEventListener("click", (e) => {
+document.querySelector("button#Prijava").addEventListener("click", (e) => {
   e.preventDefault();
   let korisnickoIme = document.querySelector("#KorisnickoIme").value;
   let sifra = document.querySelector("#Sifra").value;
@@ -247,8 +247,9 @@ document.querySelector("#Prijava").addEventListener("click", (e) => {
         prikaziZadatke();
         document.querySelector("#Aplikacija").style.display = "flex";
         document.querySelector("#Prijava").style.display = "none";
+        document.querySelector("p#greska").style.display = "none";
       } else {
-        alert("Kriva šifra.");
+        document.querySelector("p#greska").style.display = "flex";
       }
     }
   }
@@ -269,6 +270,7 @@ document.querySelector("#Registracija").addEventListener("click", (e) => {
     alert("Registracija završena.");
     document.querySelector("#Aplikacija").style.display = "flex";
     document.querySelector("#Prijava").style.display = "none";
+    document.querySelector("p#greska").style.display = "none";
   }
 });
 
@@ -283,6 +285,7 @@ document.querySelector("#Odjava").addEventListener("click", (e) => {
   spremiTrenutneKolace("imesifra", "");*/
   document.querySelector("#Aplikacija").style.display = "none";
   document.querySelector("#Prijava").style.display = "flex";
+  document.querySelector("p#greska").style.display = "none";
 });
 
 /**
