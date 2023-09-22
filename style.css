@@ -35,6 +35,12 @@ form>button {
     margin-top: 10px;
 }
 
+p#greska {
+    color: red;
+    display: none;
+    margin: 10px 0px 2px 2px;
+}
+
 div#Aplikacija {
     display: flex;
     flex-direction: column;
