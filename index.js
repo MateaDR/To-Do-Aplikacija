@@ -148,7 +148,7 @@ document.querySelector("#prihvati-kolacice").addEventListener("click", (e) => {
   };
   let expires = new Date();
   expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000); // Traju 1 godinu
-  document.cookie = `kolacic  i=${JSON.stringify(
+  document.cookie = `kolacici=${JSON.stringify(
     objektKolacica
   )};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
   document.querySelector("#kolacici").style.display = "none";
