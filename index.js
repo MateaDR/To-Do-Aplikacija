@@ -201,8 +201,7 @@ function zauzetID(id, niz) {
  */
 document.querySelector("#dodaj").addEventListener("click", () => {
   let inputZadatak = document.querySelector("#unesiZadatak").value.trim();
-  let pocinjeSaBrojem = !isNaN(inputZadatak.charAt(0)); //Zadatak ne smije poceti sa brojem
-  if (inputZadatak != "" && !pocinjeSaBrojem) {
+  if (inputZadatak != "") {
     let postojeciZadaci = dohvatiKolacice("zadaci");
     let zadaci = postojeciZadaci ? JSON.parse(postojeciZadaci) : [];
     let postojeciZadatak = false;
